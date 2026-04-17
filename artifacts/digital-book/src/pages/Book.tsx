@@ -25,6 +25,9 @@ const chapters = [
   },
 ];
 
+const INTRO_COUNT = 2;
+const TOTAL = INTRO_COUNT + chapters.length;
+
 export default function Book() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
@@ -36,85 +39,74 @@ export default function Book() {
   const lastScrollTime = useRef(0);
   const animatingRef = useRef(false);
 
-  const goToChapter = useCallback((index: number) => {
-    if (index < 0 || index >= chapters.length) return;
-    if (animatingRef.current) return;
+  const goTo = useCallback(
+    (index: number) => {
+      if (index < 0 || index >= TOTAL) return;
+      if (animatingRef.current) return;
+      animatingRef.current = true;
+      setIsAnimating(true);
+      setDirection(index > activeIndex ? "down" : "up");
+      setPrevIndex(activeIndex);
+      setActiveIndex(index);
+      setTimeout(() => {
+        setPrevIndex(null);
+        setIsAnimating(false);
+        animatingRef.current = false;
+      }, 950);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [activeIndex]
+  );
 
-    animatingRef.current = true;
-    setIsAnimating(true);
-
-    setDirection(index > activeIndex ? "down" : "up");
-    setPrevIndex(activeIndex);
-    setActiveIndex(index);
-
-    setTimeout(() => {
-      setPrevIndex(null);
-      setIsAnimating(false);
-      animatingRef.current = false;
-    }, 900);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeIndex]);
-
-  // Mouse wheel handler
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
       const now = Date.now();
-      if (now - lastScrollTime.current < 950) {
+      if (now - lastScrollTime.current < 980) {
         e.preventDefault();
         return;
       }
       if (Math.abs(e.deltaY) < 25) return;
       e.preventDefault();
       lastScrollTime.current = now;
-      if (e.deltaY > 0) {
-        goToChapter(activeIndex + 1);
-      } else {
-        goToChapter(activeIndex - 1);
-      }
+      goTo(e.deltaY > 0 ? activeIndex + 1 : activeIndex - 1);
     };
-
     window.addEventListener("wheel", handleWheel, { passive: false });
     return () => window.removeEventListener("wheel", handleWheel);
-  }, [activeIndex, goToChapter]);
+  }, [activeIndex, goTo]);
 
-  // Keyboard handler
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement).tagName;
       if (tag === "INPUT" || tag === "TEXTAREA") return;
       if (e.key === "ArrowDown" || e.key === "PageDown") {
         e.preventDefault();
-        goToChapter(activeIndex + 1);
+        goTo(activeIndex + 1);
       } else if (e.key === "ArrowUp" || e.key === "PageUp") {
         e.preventDefault();
-        goToChapter(activeIndex - 1);
+        goTo(activeIndex - 1);
       }
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [activeIndex, goToChapter]);
+  }, [activeIndex, goTo]);
 
-  // Touch handler
   const touchStartY = useRef(0);
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartY.current = e.touches[0].clientY;
   };
   const handleTouchEnd = (e: React.TouchEvent) => {
     const diff = touchStartY.current - e.changedTouches[0].clientY;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) goToChapter(activeIndex + 1);
-      else goToChapter(activeIndex - 1);
-    }
+    if (Math.abs(diff) > 50) goTo(diff > 0 ? activeIndex + 1 : activeIndex - 1);
   };
 
-  const getSlideClass = (index: number): string => {
-    if (index === activeIndex) return "slide-active";
-    if (index === prevIndex && isAnimating) {
+  const slideClass = (i: number) => {
+    if (i === activeIndex) return "slide-active";
+    if (i === prevIndex && isAnimating)
       return direction === "down" ? "slide-exit-up" : "slide-exit-down";
-    }
-    if (index < activeIndex) return "slide-above";
-    return "slide-below";
+    return i < activeIndex ? "slide-above" : "slide-below";
   };
+
+  const chapterIndex = activeIndex - INTRO_COUNT;
 
   return (
     <div
@@ -122,54 +114,86 @@ export default function Book() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {chapters.map((ch, i) => (
-        <section
-          key={ch.number}
-          className={`book-section ${getSlideClass(i)}`}
-        >
-          <div className="book-left">
-            <div className="book-left-inner">
-              <div className="book-progress">
-                {ch.number} / {chapters.length}
-              </div>
-              <div className="book-chapter-label">Chapter {ch.number}</div>
-              <h1 className="book-title">{ch.title}</h1>
-              <p className="book-subtitle">{ch.subtitle}</p>
-              <p className="book-body">{ch.body}</p>
-              <div className="book-input-wrapper">
-                <input
-                  className="book-input"
-                  type="text"
-                  placeholder="Modify the experience..."
-                  value={inputValues[i]}
-                  onChange={(e) => {
-                    const next = [...inputValues];
-                    next[i] = e.target.value;
-                    setInputValues(next);
-                  }}
-                />
+      {/* ── Section 0: Title page ─────────────────────────── */}
+      <section className={`book-section book-section--cover ${slideClass(0)}`}>
+        <div className="cover-inner">
+          <p className="cover-eyebrow">A Reading Experience</p>
+          <h1 className="cover-title">The Book<br />of Silences</h1>
+          <p className="cover-subtitle">Three meditations on perception,<br />form, and the act of reading</p>
+          <div className="cover-symbol" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect x="15.5" y="1" width="1" height="30" fill="white" fillOpacity="0.45" />
+              <rect x="1" y="15.5" width="30" height="1" fill="white" fillOpacity="0.45" />
+              <circle cx="16" cy="16" r="5.5" stroke="white" strokeOpacity="0.45" strokeWidth="1" />
+            </svg>
+          </div>
+          <p className="cover-scroll-hint">scroll to begin</p>
+        </div>
+      </section>
+
+      {/* ── Section 1: Quote / intro page ────────────────── */}
+      <section className={`book-section book-section--quote ${slideClass(1)}`}>
+        <div className="quote-inner">
+          <p className="quote-label">Preface</p>
+          <blockquote className="quote-text">
+            "The page is not a surface to be covered.<br />
+            It is a space to be inhabited —<br />
+            slowly, and with full attention."
+          </blockquote>
+          <p className="quote-attribution">— on the nature of reading</p>
+        </div>
+      </section>
+
+      {/* ── Sections 2–4: Chapters ───────────────────────── */}
+      {chapters.map((ch, i) => {
+        const globalIndex = INTRO_COUNT + i;
+        return (
+          <section
+            key={ch.number}
+            className={`book-section book-section--chapter ${slideClass(globalIndex)}`}
+          >
+            {/* Canvas — LEFT 60% */}
+            <div className="chapter-canvas">
+              <div className="chapter-canvas-inner">
+                <span className="chapter-canvas-glyph">{ch.canvasLabel}</span>
               </div>
             </div>
-          </div>
 
-          <div className="book-right">
-            <div className="book-canvas">
-              <span className="book-canvas-glyph">{ch.canvasLabel}</span>
+            {/* Text — RIGHT 40% */}
+            <div className="chapter-text">
+              <div className="chapter-text-inner">
+                <div className="chapter-progress">
+                  {ch.number} / {chapters.length}
+                </div>
+                <div className="chapter-label">Chapter {ch.number}</div>
+                <h2 className="chapter-title">{ch.title}</h2>
+                <p className="chapter-subtitle">{ch.subtitle}</p>
+                <p className="chapter-body">{ch.body}</p>
+                <div className="chapter-input-wrapper">
+                  <input
+                    className="chapter-input"
+                    type="text"
+                    placeholder="Modify the experience..."
+                    value={inputValues[i]}
+                    onChange={(e) => {
+                      const next = [...inputValues];
+                      next[i] = e.target.value;
+                      setInputValues(next);
+                    }}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        </section>
-      ))}
+          </section>
+        );
+      })}
 
-      <nav className="book-nav">
-        {chapters.map((_, i) => (
-          <button
-            key={i}
-            className={`book-nav-dot ${i === activeIndex ? "book-nav-dot--active" : ""}`}
-            onClick={() => goToChapter(i)}
-            aria-label={`Go to chapter ${i + 1}`}
-          />
-        ))}
-      </nav>
+      {/* ── Subtle global progress (chapters only) ────────── */}
+      {chapterIndex >= 0 && (
+        <div className="global-progress" aria-hidden="true">
+          {chapterIndex + 1} / {chapters.length}
+        </div>
+      )}
     </div>
   );
 }
