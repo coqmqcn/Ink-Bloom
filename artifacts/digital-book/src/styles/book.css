@@ -1,0 +1,360 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap');
+
+/* ── Reset ──────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+}
+
+/* ── Root ───────────────────────────────────────────────── */
+.book-root {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background: #000;
+  color: #fff;
+}
+
+/* ── Sections ───────────────────────────────────────────── */
+.book-section {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform, opacity;
+  transition:
+    transform 0.88s cubic-bezier(0.76, 0, 0.24, 1),
+    opacity 0.88s cubic-bezier(0.76, 0, 0.24, 1);
+  pointer-events: none;
+}
+
+/* Visible / current chapter */
+.slide-active {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: all;
+  z-index: 3;
+}
+
+/* Waiting below — not yet visited */
+.slide-below {
+  transform: translateY(100%);
+  opacity: 0;
+  z-index: 1;
+}
+
+/* Already passed — lives above viewport */
+.slide-above {
+  transform: translateY(-100%);
+  opacity: 0;
+  z-index: 1;
+}
+
+/* Exiting downward (when navigating forward) */
+.slide-exit-up {
+  transform: translateY(-8%);
+  opacity: 0;
+  z-index: 2;
+  transition:
+    transform 0.88s cubic-bezier(0.76, 0, 0.24, 1),
+    opacity 0.55s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* Exiting upward (when navigating backward) */
+.slide-exit-down {
+  transform: translateY(8%);
+  opacity: 0;
+  z-index: 2;
+  transition:
+    transform 0.88s cubic-bezier(0.76, 0, 0.24, 1),
+    opacity 0.55s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* ── Left panel ─────────────────────────────────────────── */
+.book-left {
+  width: 40%;
+  height: 100%;
+  background: #000;
+  display: flex;
+  align-items: center;
+  padding: 0 5vw;
+  position: relative;
+  z-index: 1;
+}
+
+.book-left::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 10%;
+  height: 80%;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.book-left-inner {
+  max-width: 480px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Progress ───────────────────────────────────────────── */
+.book-progress {
+  font-family: 'Inter', sans-serif;
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.22);
+  text-transform: uppercase;
+  margin-bottom: 3.25rem;
+  user-select: none;
+}
+
+/* ── Chapter label ──────────────────────────────────────── */
+.book-chapter-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  color: rgba(255, 255, 255, 0.28);
+  text-transform: uppercase;
+  margin-bottom: 1.1rem;
+  user-select: none;
+}
+
+/* ── Title ──────────────────────────────────────────────── */
+.book-title {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: clamp(2rem, 3.8vw, 3.4rem);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: #fff;
+  margin-bottom: 1.4rem;
+}
+
+/* ── Subtitle ───────────────────────────────────────────── */
+.book-subtitle {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: clamp(0.92rem, 1.35vw, 1.1rem);
+  font-weight: 400;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.55;
+  margin-bottom: 2.4rem;
+}
+
+/* ── Body ───────────────────────────────────────────────── */
+.book-body {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: clamp(1rem, 1.4vw, 1.18rem);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.9;
+  margin-bottom: 3.25rem;
+}
+
+/* ── Input ──────────────────────────────────────────────── */
+.book-input-wrapper {
+  position: relative;
+}
+
+.book-input-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.13);
+  transition: background 0.35s ease;
+}
+
+.book-input-wrapper:focus-within::after {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.book-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 12.5px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.65);
+  padding: 0.65rem 0;
+  caret-color: #fff;
+  letter-spacing: 0.025em;
+}
+
+.book-input::placeholder {
+  color: rgba(255, 255, 255, 0.18);
+  font-style: italic;
+}
+
+/* ── Right canvas panel ─────────────────────────────────── */
+.book-right {
+  width: 60%;
+  height: 100%;
+  background: #030303;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ambient center glow */
+.book-right::before {
+  content: '';
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse, rgba(255,255,255,0.018) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+/* Subtle vignette corners */
+.book-right::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(0,0,0,0.6) 0%, transparent 45%),
+    radial-gradient(ellipse at 100% 0%, rgba(0,0,0,0.6) 0%, transparent 45%),
+    radial-gradient(ellipse at 0% 100%, rgba(0,0,0,0.6) 0%, transparent 45%),
+    radial-gradient(ellipse at 100% 100%, rgba(0,0,0,0.6) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+.book-canvas {
+  width: 64%;
+  height: 64%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+/* Fine grid */
+.book-canvas::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+/* Outer border */
+.book-canvas::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+/* Roman numeral glyph */
+.book-canvas-glyph {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: clamp(5rem, 11vw, 13rem);
+  font-weight: 400;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.04);
+  user-select: none;
+  pointer-events: none;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Nav dots ────────────────────────────────────────────── */
+.book-nav {
+  position: fixed;
+  right: 2.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  z-index: 100;
+}
+
+.book-nav-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.3s ease, transform 0.3s ease;
+  outline: none;
+}
+
+.book-nav-dot:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.book-nav-dot--active {
+  background: rgba(255, 255, 255, 0.8);
+  transform: scale(1.6);
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .book-section {
+    flex-direction: column;
+  }
+
+  .book-left {
+    width: 100%;
+    height: 58%;
+    padding: 0 8vw;
+    align-items: flex-end;
+    padding-bottom: 1.5rem;
+  }
+
+  .book-left::after {
+    display: none;
+  }
+
+  .book-right {
+    width: 100%;
+    height: 42%;
+  }
+
+  .book-canvas {
+    width: 82%;
+    height: 82%;
+  }
+
+  .book-nav {
+    right: 1rem;
+  }
+
+  .book-progress {
+    margin-bottom: 1.5rem;
+  }
+
+  .book-body {
+    margin-bottom: 2rem;
+  }
+}

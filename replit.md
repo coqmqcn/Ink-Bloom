@@ -16,6 +16,17 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - **API codegen**: Orval (from OpenAPI spec)
 - **Build**: esbuild (CJS bundle)
 
+## Artifacts
+
+### digital-book (React + Vite, preview path: `/`)
+An immersive fullscreen digital book reading experience.
+- **Design**: Black-and-white only, no cards/borders/shadows
+- **Layout**: Split-screen — 40% text left, 60% visual canvas right
+- **Navigation**: Section-by-section transitions (wheel, keyboard, touch) with smooth slide animation
+- **Typography**: EB Garamond (serif) for headings/body, Inter (sans) for UI labels
+- **Features**: 3 chapters, progress indicator, minimal input per chapter, nav dots
+- **Stack**: Pure React + plain CSS (no UI library), no backend needed
+
 ## Key Commands
 
 - `pnpm run typecheck` — full typecheck across all packages
