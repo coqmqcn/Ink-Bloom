@@ -396,6 +396,43 @@ html, body, #root {
 }
 
 /* ══════════════════════════════════════════════════════════
+   MARGIN SIDEBAR  (chapters only — chapter numbers vertically)
+   ══════════════════════════════════════════════════════════ */
+.chapter-margin {
+  position: fixed;
+  top: 50%;
+  left: 2.25rem;
+  transform: translateY(-50%);
+  z-index: 100;
+  pointer-events: none;
+  user-select: none;
+}
+
+.chapter-margin-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  margin: 0;
+  padding: 0;
+}
+
+.chapter-margin-item {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.13);
+  transition: color 0.5s ease;
+  font-variant-numeric: tabular-nums;
+}
+
+.chapter-margin-item--active {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 400;
+}
+
+/* ══════════════════════════════════════════════════════════
    GLOBAL PROGRESS  (chapters only, bottom-left, very subtle)
    ══════════════════════════════════════════════════════════ */
 .global-progress {

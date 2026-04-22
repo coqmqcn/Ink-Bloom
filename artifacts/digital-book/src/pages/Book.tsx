@@ -188,6 +188,22 @@ export default function Book() {
         );
       })}
 
+      {/* ── Margin sidebar (chapters only) ────────────────── */}
+      {chapterIndex >= 0 && (
+        <aside className="chapter-margin" aria-hidden="true">
+          <ul className="chapter-margin-list">
+            {chapters.map((ch, i) => (
+              <li
+                key={ch.number}
+                className={`chapter-margin-item ${i === chapterIndex ? "chapter-margin-item--active" : ""}`}
+              >
+                {String(ch.number).padStart(2, "0")}
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )}
+
       {/* ── Subtle global progress (chapters only) ────────── */}
       {chapterIndex >= 0 && (
         <div className="global-progress" aria-hidden="true">
