@@ -190,18 +190,23 @@ export default function Book() {
 
       {/* ── Margin sidebar (chapters only) ────────────────── */}
       {chapterIndex >= 0 && (
-        <aside className="chapter-margin" aria-hidden="true">
+        <nav className="chapter-margin" aria-label="Chapters">
           <ul className="chapter-margin-list">
             {chapters.map((ch, i) => (
-              <li
-                key={ch.number}
-                className={`chapter-margin-item ${i === chapterIndex ? "chapter-margin-item--active" : ""}`}
-              >
-                {String(ch.number).padStart(2, "0")}
+              <li key={ch.number} className="chapter-margin-li">
+                <button
+                  type="button"
+                  onClick={() => goTo(INTRO_COUNT + i)}
+                  className={`chapter-margin-item ${i === chapterIndex ? "chapter-margin-item--active" : ""}`}
+                  aria-label={`Go to chapter ${ch.number}`}
+                  aria-current={i === chapterIndex ? "true" : undefined}
+                >
+                  {String(ch.number).padStart(2, "0")}
+                </button>
               </li>
             ))}
           </ul>
-        </aside>
+        </nav>
       )}
 
       {/* ── Subtle global progress (chapters only) ────────── */}
