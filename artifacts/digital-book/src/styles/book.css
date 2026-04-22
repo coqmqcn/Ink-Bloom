@@ -21,9 +21,12 @@ html, body, #root {
   position: relative;
   background: #000;
   color: #fff;
+  --depth: 0;
 }
 
-/* ── Section base ───────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+   SECTION TRANSITIONS — gentler, softer, with breath
+   ══════════════════════════════════════════════════════════ */
 .book-section {
   display: flex;
   width: 100%;
@@ -31,45 +34,44 @@ html, body, #root {
   position: absolute;
   top: 0;
   left: 0;
-  will-change: transform, opacity;
+  will-change: transform, opacity, filter;
   transition:
-    transform 0.92s cubic-bezier(0.76, 0, 0.24, 1),
-    opacity 0.92s cubic-bezier(0.76, 0, 0.24, 1);
+    transform 1.4s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 1.4s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
 }
 
-/* Slide states */
 .slide-active {
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
   opacity: 1;
+  filter: blur(0);
   pointer-events: all;
   z-index: 3;
 }
 .slide-below {
-  transform: translateY(100%);
+  transform: translateY(60%) scale(0.985);
   opacity: 0;
+  filter: blur(6px);
   z-index: 1;
 }
 .slide-above {
-  transform: translateY(-100%);
+  transform: translateY(-60%) scale(0.985);
   opacity: 0;
+  filter: blur(6px);
   z-index: 1;
 }
 .slide-exit-up {
-  transform: translateY(-6%);
+  transform: translateY(-12%) scale(0.99);
   opacity: 0;
+  filter: blur(8px);
   z-index: 2;
-  transition:
-    transform 0.92s cubic-bezier(0.76, 0, 0.24, 1),
-    opacity 0.5s cubic-bezier(0.76, 0, 0.24, 1);
 }
 .slide-exit-down {
-  transform: translateY(6%);
+  transform: translateY(12%) scale(0.99);
   opacity: 0;
+  filter: blur(8px);
   z-index: 2;
-  transition:
-    transform 0.92s cubic-bezier(0.76, 0, 0.24, 1),
-    opacity 0.5s cubic-bezier(0.76, 0, 0.24, 1);
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -86,28 +88,27 @@ html, body, #root {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 0;
 }
 
 .cover-eyebrow {
   font-family: 'Inter', sans-serif;
   font-size: 10px;
   font-weight: 400;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.32em;
   color: rgba(255, 255, 255, 0.22);
   text-transform: uppercase;
-  margin-bottom: 3.5rem;
+  margin-bottom: 4rem;
   user-select: none;
 }
 
 .cover-title {
   font-family: 'EB Garamond', Georgia, serif;
-  font-size: clamp(3.5rem, 7.5vw, 7rem);
+  font-size: clamp(3.8rem, 8.5vw, 8rem);
   font-weight: 500;
-  line-height: 1.03;
-  letter-spacing: -0.02em;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
   color: #fff;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .cover-subtitle {
@@ -115,9 +116,9 @@ html, body, #root {
   font-size: clamp(0.95rem, 1.5vw, 1.15rem);
   font-weight: 400;
   font-style: italic;
-  color: rgba(255, 255, 255, 0.38);
-  line-height: 1.7;
-  margin-bottom: 3.75rem;
+  color: rgba(255, 255, 255, 0.36);
+  line-height: 1.85;
+  margin-bottom: 4rem;
 }
 
 .cover-symbol {
@@ -131,7 +132,7 @@ html, body, #root {
   font-family: 'Inter', sans-serif;
   font-size: 9.5px;
   font-weight: 300;
-  letter-spacing: 0.26em;
+  letter-spacing: 0.3em;
   color: rgba(255, 255, 255, 0.14);
   text-transform: uppercase;
   user-select: none;
@@ -153,28 +154,27 @@ html, body, #root {
   text-align: center;
   max-width: 520px;
   padding: 0 2rem;
-  gap: 0;
 }
 
 .quote-label {
   font-family: 'Inter', sans-serif;
   font-size: 10px;
   font-weight: 400;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.32em;
   color: rgba(255, 255, 255, 0.2);
   text-transform: uppercase;
-  margin-bottom: 3rem;
+  margin-bottom: 3.5rem;
   user-select: none;
 }
 
 .quote-text {
   font-family: 'EB Garamond', Georgia, serif;
-  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  font-size: clamp(1.3rem, 2.3vw, 1.85rem);
   font-weight: 400;
   font-style: italic;
-  color: rgba(255, 255, 255, 0.72);
-  line-height: 1.75;
-  margin-bottom: 2rem;
+  color: rgba(255, 255, 255, 0.74);
+  line-height: 1.85;
+  margin-bottom: 2.5rem;
   quotes: none;
 }
 
@@ -182,12 +182,12 @@ html, body, #root {
   font-family: 'EB Garamond', Georgia, serif;
   font-size: clamp(0.8rem, 1.1vw, 0.95rem);
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.22);
   letter-spacing: 0.04em;
 }
 
 /* ══════════════════════════════════════════════════════════
-   SECTIONS 2–4 — CHAPTERS  (canvas LEFT, text RIGHT)
+   CHAPTERS — canvas LEFT, text RIGHT
    ══════════════════════════════════════════════════════════ */
 .book-section--chapter {
   background: #000;
@@ -197,7 +197,7 @@ html, body, #root {
 .chapter-canvas {
   width: 60%;
   height: 100%;
-  background: #040404;
+  background: #030303;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -206,83 +206,65 @@ html, body, #root {
   flex-shrink: 0;
 }
 
-/* Ambient glow */
 .chapter-canvas::before {
   content: '';
   position: absolute;
-  width: 65%;
-  height: 65%;
+  width: 70%;
+  height: 70%;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(ellipse, rgba(255,255,255,0.016) 0%, transparent 65%);
+  transform: translate(-50%, -50%) scale(calc(1 + var(--depth) * 0.08));
+  background: radial-gradient(ellipse, rgba(255,255,255,0.025) 0%, transparent 65%);
   pointer-events: none;
+  transition: transform 0.6s ease-out;
 }
 
-/* Corner vignette */
 .chapter-canvas::after {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 0% 0%,   rgba(0,0,0,0.55) 0%, transparent 42%),
-    radial-gradient(ellipse at 100% 0%,  rgba(0,0,0,0.55) 0%, transparent 42%),
-    radial-gradient(ellipse at 0% 100%, rgba(0,0,0,0.55) 0%, transparent 42%),
-    radial-gradient(ellipse at 100% 100%, rgba(0,0,0,0.55) 0%, transparent 42%);
+    radial-gradient(ellipse at 0% 0%,    rgba(0,0,0,0.6) 0%, transparent 45%),
+    radial-gradient(ellipse at 100% 0%,  rgba(0,0,0,0.6) 0%, transparent 45%),
+    radial-gradient(ellipse at 0% 100%,  rgba(0,0,0,0.6) 0%, transparent 45%),
+    radial-gradient(ellipse at 100% 100%, rgba(0,0,0,0.6) 0%, transparent 45%);
   pointer-events: none;
 }
 
 .chapter-canvas-inner {
-  width: 62%;
-  height: 62%;
+  width: 64%;
+  height: 64%;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1;
+  --depth: 0;
+  /* Scroll = depth → gentle scale + drift */
+  transform: scale(calc(1 + var(--depth) * 0.18));
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* Fine grid */
-.chapter-canvas-inner::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
-  background-size: 38px 38px;
+/* Generative SVG visuals fill the inner canvas */
+.chapter-visual {
+  width: 100%;
+  height: 100%;
+  display: block;
+  /* Slight blur that decreases as user dives — focus through depth */
+  filter: blur(calc((1 - var(--depth)) * 0.6px));
+  opacity: calc(0.85 + var(--depth) * 0.15);
+  transition: filter 0.5s ease-out, opacity 0.5s ease-out;
 }
 
-/* Outer frame */
-.chapter-canvas-inner::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.chapter-canvas-glyph {
-  font-family: 'EB Garamond', Georgia, serif;
-  font-size: clamp(5rem, 10vw, 12rem);
-  font-weight: 400;
-  font-style: italic;
-  color: rgba(255, 255, 255, 0.038);
-  user-select: none;
-  pointer-events: none;
-  line-height: 1;
-  position: relative;
-  z-index: 1;
-}
-
-/* Thin vertical divider between canvas and text */
+/* Vertical divider between canvas and text */
 .chapter-canvas + .chapter-text::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 12%;
-  height: 76%;
+  top: 14%;
+  height: 72%;
   width: 1px;
-  background: rgba(255, 255, 255, 0.065);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 /* ── Text — RIGHT 40% ───────────────────────────────────── */
@@ -298,66 +280,55 @@ html, body, #root {
 }
 
 .chapter-text-inner {
-  max-width: 420px;
+  max-width: 360px;
   width: 100%;
   display: flex;
   flex-direction: column;
 }
 
-/* Progress */
-.chapter-progress {
-  font-family: 'Inter', sans-serif;
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.22em;
-  color: rgba(255, 255, 255, 0.18);
-  text-transform: uppercase;
-  margin-bottom: 3rem;
-  user-select: none;
-}
-
-/* Chapter label */
 .chapter-label {
   font-family: 'Inter', sans-serif;
   font-size: 10px;
   font-weight: 400;
-  letter-spacing: 0.26em;
-  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.32em;
+  color: rgba(255, 255, 255, 0.22);
   text-transform: uppercase;
-  margin-bottom: 1rem;
+  margin-bottom: 1.75rem;
   user-select: none;
 }
 
-/* Chapter title */
 .chapter-title {
   font-family: 'EB Garamond', Georgia, serif;
-  font-size: clamp(1.9rem, 3.4vw, 3.1rem);
+  font-size: clamp(2.1rem, 3.8vw, 3.5rem);
   font-weight: 500;
-  line-height: 1.08;
-  letter-spacing: -0.015em;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
   color: #fff;
-  margin-bottom: 1.3rem;
+  margin-bottom: 1.6rem;
 }
 
-/* Subtitle */
 .chapter-subtitle {
   font-family: 'EB Garamond', Georgia, serif;
-  font-size: clamp(0.88rem, 1.25vw, 1.05rem);
+  font-size: clamp(0.9rem, 1.3vw, 1.08rem);
   font-weight: 400;
   font-style: italic;
-  color: rgba(255, 255, 255, 0.38);
-  line-height: 1.6;
-  margin-bottom: 2.2rem;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.7;
+  margin-bottom: 3rem;
 }
 
-/* Body */
 .chapter-body {
+  margin-bottom: 3.5rem;
+}
+.chapter-body p {
   font-family: 'EB Garamond', Georgia, serif;
-  font-size: clamp(0.98rem, 1.35vw, 1.15rem);
+  font-size: clamp(0.98rem, 1.3vw, 1.13rem);
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.65);
-  line-height: 1.92;
-  margin-bottom: 3rem;
+  color: rgba(255, 255, 255, 0.66);
+  line-height: 2.05;
+}
+.chapter-body p + p {
+  margin-top: 1.5rem;
 }
 
 /* Input */
@@ -371,11 +342,11 @@ html, body, #root {
   left: 0;
   right: 0;
   height: 1px;
-  background: rgba(255, 255, 255, 0.11);
-  transition: background 0.35s ease;
+  background: rgba(255, 255, 255, 0.09);
+  transition: background 0.5s ease;
 }
 .chapter-input-wrapper:focus-within::after {
-  background: rgba(255, 255, 255, 0.48);
+  background: rgba(255, 255, 255, 0.42);
 }
 .chapter-input {
   width: 100%;
@@ -385,23 +356,23 @@ html, body, #root {
   font-family: 'Inter', sans-serif;
   font-size: 12px;
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.62);
-  padding: 0.6rem 0;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 0.65rem 0;
   caret-color: #fff;
   letter-spacing: 0.025em;
 }
 .chapter-input::placeholder {
-  color: rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.14);
   font-style: italic;
 }
 
 /* ══════════════════════════════════════════════════════════
-   MARGIN SIDEBAR  (chapters only — chapter numbers vertically)
+   MARGIN SIDEBAR — quietly present, like printed marginalia
    ══════════════════════════════════════════════════════════ */
 .chapter-margin {
   position: fixed;
   top: 50%;
-  left: 2.25rem;
+  left: 2.5rem;
   transform: translateY(-50%);
   z-index: 100;
   user-select: none;
@@ -411,14 +382,12 @@ html, body, #root {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.55rem;
   margin: 0;
   padding: 0;
 }
 
-.chapter-margin-li {
-  display: flex;
-}
+.chapter-margin-li { display: flex; }
 
 .chapter-margin-item {
   appearance: none;
@@ -427,11 +396,11 @@ html, body, #root {
   outline: none;
   cursor: pointer;
   font-family: 'Inter', sans-serif;
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 300;
-  letter-spacing: 0.18em;
-  color: rgba(255, 255, 255, 0.13);
-  transition: color 0.4s ease, transform 0.3s ease;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.07);
+  transition: color 1.2s ease;
   font-variant-numeric: tabular-nums;
   padding: 0.55rem 0.4rem;
   min-width: 28px;
@@ -440,22 +409,17 @@ html, body, #root {
   -webkit-tap-highlight-color: transparent;
 }
 
-.chapter-margin-item:hover {
-  color: rgba(255, 255, 255, 0.5);
-}
-
 .chapter-margin-item:focus-visible {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.45);
 }
 
-.chapter-margin-item--active,
-.chapter-margin-item--active:hover {
-  color: rgba(255, 255, 255, 0.78);
+.chapter-margin-item--active {
+  color: rgba(255, 255, 255, 0.32);
   font-weight: 400;
 }
 
 /* ══════════════════════════════════════════════════════════
-   GLOBAL PROGRESS  (chapters only, bottom-left, very subtle)
+   GLOBAL PROGRESS  (chapters only — bottom-left)
    ══════════════════════════════════════════════════════════ */
 .global-progress {
   position: fixed;
@@ -464,81 +428,55 @@ html, body, #root {
   font-family: 'Inter', sans-serif;
   font-size: 10px;
   font-weight: 400;
-  letter-spacing: 0.22em;
-  color: rgba(255, 255, 255, 0.16);
+  letter-spacing: 0.28em;
+  color: rgba(255, 255, 255, 0.13);
   text-transform: uppercase;
   z-index: 100;
   user-select: none;
   pointer-events: none;
-  transition: opacity 0.4s ease;
+  font-variant-numeric: tabular-nums;
 }
 
 /* ══════════════════════════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  .book-section--chapter {
-    flex-direction: column-reverse;
-  }
+  .book-section--chapter { flex-direction: column-reverse; }
 
-  .chapter-canvas {
-    width: 100%;
-    height: 42%;
-  }
-
-  .chapter-canvas-inner {
-    width: 80%;
-    height: 80%;
-  }
+  .chapter-canvas { width: 100%; height: 42%; }
+  .chapter-canvas-inner { width: 80%; height: 80%; }
 
   .chapter-text {
     width: 100%;
     height: 58%;
-    padding: 2rem 8vw 1rem;
+    padding: 2.25rem 7vw 1rem;
     align-items: flex-start;
   }
+  .chapter-text::before { display: none; }
+  .chapter-text-inner { max-width: 100%; }
 
-  .chapter-text::before {
-    display: none;
-  }
+  .chapter-label { margin-bottom: 1.25rem; }
+  .chapter-title { margin-bottom: 1rem; }
+  .chapter-subtitle { margin-bottom: 1.75rem; }
+  .chapter-body { margin-bottom: 2rem; }
+  .chapter-body p + p { margin-top: 1.1rem; }
 
-  .chapter-progress {
-    margin-bottom: 1.25rem;
-  }
+  .cover-title { font-size: clamp(2.6rem, 10vw, 4.5rem); }
+  .quote-text { font-size: clamp(1.1rem, 4vw, 1.5rem); }
 
-  .chapter-body {
-    margin-bottom: 1.75rem;
-  }
+  .global-progress { bottom: 1.25rem; left: 1.5rem; }
 
-  .cover-title {
-    font-size: clamp(2.6rem, 10vw, 4.5rem);
-  }
-
-  .quote-text {
-    font-size: clamp(1.1rem, 4vw, 1.5rem);
-  }
-
-  .global-progress {
-    bottom: 1.25rem;
-    left: 1.5rem;
-  }
-
-  /* Sidebar becomes a horizontal indicator at the top edge */
+  /* Sidebar → centered horizontal row at top */
   .chapter-margin {
-    top: 0.6rem;
+    top: 0.75rem;
     left: 50%;
     transform: translate(-50%, 0);
   }
-
-  .chapter-margin-list {
-    flex-direction: row;
-    gap: 0.25rem;
-  }
-
+  .chapter-margin-list { flex-direction: row; gap: 0.25rem; }
   .chapter-margin-item {
-    padding: 0.7rem 0.65rem;
+    padding: 0.7rem 0.7rem;
     min-width: 36px;
     text-align: center;
-    font-size: 10.5px;
+    font-size: 10px;
   }
 }
